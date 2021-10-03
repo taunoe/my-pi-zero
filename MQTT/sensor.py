@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 """
-Devise 1.
-Sends data to Broker
+Devise: Sensor
+Sends data to Broker.
 Tauno Erik
 02.10.2021
 """
