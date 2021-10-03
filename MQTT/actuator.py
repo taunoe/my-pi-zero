@@ -1,13 +1,12 @@
 #!/usr/bin/python3
 
 """
-Devise: LED
-Reads command from Broker.
+Reads commands from Broker.
 Tauno Erik
 03.10.2021
 """
 
-import secrets                  # secrets.py file
+import settings                 # settings.py file
 import paho.mqtt.client as mqtt # pip3 install paho-mqtt
 import time
 import json
@@ -84,15 +83,15 @@ led_status, led_on, led_off = create_led()
 
 
 # MQTT
-id = secrets.CLIENT_ID
-client_telemetry_topic = id + '/telemetry'
-server_command_topic = id + '/commands'
-client_name = id + 'nightlight_client'
+id = settings.ID
+topic_telemetry = settings.TOPIC_TELEMETRY
+topic_command = settings.TOPIC_COMMAND
+client_name = id + 'actuator'
 
 mqtt_client = mqtt.Client(client_name)
-mqtt_client.connect('test.mosquitto.org')
+mqtt_client.connect(settings.BROKER)
 
-mqtt_client.subscribe(server_command_topic)
+mqtt_client.subscribe(topic_command)
 mqtt_client.on_message = handle_command
 
 mqtt_client.loop_start()
@@ -104,6 +103,6 @@ while True:
     print('Light level:', light)
 
     telemetry = json.dumps({'light' : light})
-    mqtt_client.publish(client_telemetry_topic, telemetry)
+    mqtt_client.publish(topic_telemetry, telemetry)
 
     time.sleep(5)

@@ -1,26 +1,24 @@
 #!/usr/bin/python3
 
 """
-Devise: Sensor
 Sends data to Broker.
 Tauno Erik
-02.10.2021
+03.10.2021
 """
 
-import secrets                  # secrets.py file
+import settings                 # settings.py file
 import paho.mqtt.client as mqtt # pip3 install paho-mqtt
 import time
 import json
 
 ENVIRONMENT = 'dev'
 
-id = secrets.CLIENT_ID
-
-client_telemetry_topic = id + '/telemetry'
-client_name = id + 'nightlight_client'
+id = settings.ID
+topic_telemetry = settings.TOPIC_TELEMETRY
+client_name = id + 'sensor'
 
 mqtt_client = mqtt.Client(client_name)
-mqtt_client.connect('test.mosquitto.org')
+mqtt_client.connect(settings.BROKER)
 
 mqtt_client.loop_start()
 
@@ -62,6 +60,6 @@ while True:
 
     print("Sending telemetry ", telemetry)
 
-    mqtt_client.publish(client_telemetry_topic, telemetry)
+    mqtt_client.publish(topic_telemetry, telemetry)
 
     time.sleep(5)
